@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="imagetoolbar" content="no">
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<meta name="description" content="JavaScript-PacMan 2 mini - an online Pacman in JavaScript. The mini version is optimized for small screens and displays.">
+<meta property="og:title" content="JavaScript-PacMan 2 mini" />
+<meta property="og:type" content="game" />
+
+	<title>JavaScript-PacMan 2.6 mini</title>
+
+	<!--[if lt IE 7]>
+	<script type="text/javascript">
+		// set a flag for MS IE 6 or lower
+		var pacmanMsieLe6=(navigator.userAgent.indexOf('chromeframe')>=0)? false:true;
+	</script>
+	<![endif]-->
+	
+<script type="text/javascript" src="AC_OETags_jspm_wa.js"></script>
+<script type="text/javascript" src="JS-pacman2_6-ui_wa.js"></script>
+<script type="text/javascript" src="JS-pacman2_6_mini.js"></script>
+<link rel="stylesheet" href="JS-pacman2_6-styles_mini.css" type="text/css">
+
+<script type="text/javascript">
+
+var aboutToggle=true;
+
+function toggleAbout() {
+	if (document.images) {
+		var t1=document.getElementById('about1');
+		var t2=document.getElementById('about2');
+		var triangle=document.getElementById('disclosureTriangle');
+		if (aboutToggle) {
+			if (t1) t1.style.display='none';
+			if (t2) t2.style.display='none';
+			triangle.className='disclosureTriangle_closed';
+			triangle.title='expand';
+			aboutToggle=false;
+		}
+		else {
+			if (t1) t1.style.display='block';
+			if (t2) t2.style.display='block';
+			triangle.className='disclosureTriangle_open';
+			triangle.title='collapse';
+			aboutToggle=true;
+		}	
+	}
+}
+
+</script>
+</head>
+
+<body>
+
+<center>
+
+<h1 style="display:none;">JavaScript-PacMan<small> </small>2<sup><span class="subversion">.6&nbsp;</span>mini</sup></h1>
+
+<div id="pacmanBoard">
+	<div id="pacmanMaze"><table border="0" cellspcaing="0" cellpadding="0" width="432" height="270">
+	<tr><td align="center" valign="middle"><noscript>
+	This page requires JavaScript!<br><br>To play this game activate JavaScript in the browser's settings and reload this page.<br>
+	</noscript>&nbsp;</td></tr>
+	</table></div>
+	<div id="pacmanProgress" style="visibility: hidden;">
+		<table border="0" cellspacing="0" cellpadding="6" width="220">
+		<tr>
+			<td colspan="2" align="center" class="pacmanProgresstext">Loading images ...</td>
+		</tr>
+		<tr valign="middle">
+			<td><div id="pacmanProgressbarbg"><div id="pacmanProgressbar"></div></div></td>
+			<td id="pacmanProgressvalue" align="right" class="pacmanProgresstext">0%</td>
+		</tr>
+		</table>
+	</div>
+	<div id="pacmanMazeoverlay"><img id="pacmanOverlayimage" src="pacimages/bordermini.gif" width="434" height="272" alt="" onclick="void(0)"></div>
+	<div id="pacmanRestartdialog">
+		<table border="0" cellspacing="0" cellpadding="0" width="260">
+		<tr><td class="pacmanDialogtitle">New Game</td></tr>
+		<tr><td align="center" class="pacmanDialogbody">
+			<table border="0" cellspacing="0" cellpadding="6">
+			<tr>
+			<td nowrap class="pacmanDialogtext" align="center" style="padding-bottom: 16px">End the current game and start a new one?</td>
+			</tr>
+			<tr>
+			<td class="pacmanDialogtext" align="right">
+				<button class="pacmanDialogbutton" onclick="JSPacMan.hideRestartDialog(false)" onfocus="if(this.blur)this.blur()">No</button>
+				&nbsp;
+				<button class="pacmanDialogbutton" onclick="JSPacMan.hideRestartDialog(true)" onfocus="if(this.blur)this.blur()"><b>Yes</b></button>
+			</td>
+			</tr>
+			</table>
+		</td>
+		</tr>
+		</table>
+	</div>
+</div>
+<div id="pacmanControls">
+	<table border="0" cellspacing="0" cellpadding="0" width="422">
+	<tr valign="top">
+		<td width="151" align="left"><img src="pacimages/life_lo.gif" alt="" width="26" height="26" id="pacmanLife1" hspace="2" vspace="2"><img src="pacimages/life_lo.gif" alt="" width="26" height="26" id="pacmanLife2" hspace="2" vspace="2"><img src="pacimages/life_lo.gif" alt="" width="26" height="26" id="pacmanLife3" hspace="2" vspace="2"><img src="pacimages/xx.gif" alt="" width="26" height="26" id="pacmanLife4" hspace="2" vspace="2"><img src="pacimages/xx.gif" alt="" width="26" height="26" id="pacmanLife5" hspace="2" vspace="2"></td>
+		<td align="center" width="120">
+			<table border="0" cellspacing="0" cellpadding="1">
+				<tr valign="top">
+					<td nowrap class="pacmanGamedisplay" align="left">Level:&nbsp;</td>
+					<td id="pacmanLeveldisplay" nowrap class="pacmanGamedisplay" align="left" width="50"></td>
+				</tr>
+				<tr valign="top">
+					<td height="22" nowrap class="pacmanGamedisplay" align="left">Score:&nbsp;</td>
+					<td height="22" id="pacmanScoredisplay" nowrap class="pacmanGamedisplay" align="left" width="50"></td>
+				</tr>
+			</table>
+			<a href="javascript://click.to.start.a.new.game" id="pacmanNewGame" onfocus="if (this.blur) { this.blur(); }" onclick="JSPacMan.newGame(); return false">New Game</a></td>
+		<td width="151" valign="top" align="right">
+			<img src="pacimages/ctrl.gif" border="0" height="72" width="72" usemap="#ctrlmap" hspace="15">
+			<map name="ctrlmap">
+				<area shape=rect coords="28,27,44,44" href="javascript:JSPacMan.doPause()" onmouseover="window.status=''; return true" onmouseout="window.status=''; return true">
+				<area shape=polygon coords="71,17,71,17,71,54,62,62,44,44,43,29,62,9" href="javascript:JSPacMan.setPacDirection(1)" onmouseover="JSPacMan.setPacDirection(1);window.status='right.'; return true" onmouseout="window.status=''; return true">
+				<area shape=polygon coords="0,19,0,19,11,9,27,28,28,44,11,62,2,53" href="javascript:JSPacMan.setPacDirection(2)" onmouseover="JSPacMan.setPacDirection(2);window.status='left.'; return true" onmouseout="window.status=''; return true">
+				<area shape=polygon coords="16,71,16,71,1,52,26,39,45,39,71,54,53,71" href="javascript:JSPacMan.setPacDirection(8)" onmouseover="JSPacMan.setPacDirection(8);window.status='down.'; return true" onmouseout="window.status=''; return true">
+				<area shape=polygon coords="2,16,2,16,18,0,54,0,71,17,45,38,27,38" href="javascript:JSPacMan.setPacDirection(4)" onmouseover="JSPacMan.setPacDirection(4);window.status='up.'; return true" onmouseout="window.status=''; return true">
+			</map>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4" height="12"></td>
+	</tr>
+	</table>
+
+	<table border="0" cellspacing="0" cellpadding="0" width="422" height="40">
+	<tr valign="top">
+		<td>
+		<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td colspan="3" height="12">
+<script type="text/javascript">
+<!--
+// embedding of flash sound-bridge
+var JSPacManSwfSupported = ((!AudioManager.supported()) && AC_OETags.DetectFlashVer(9, 0, 0));
+
+if (JSPacManSwfSupported) {
+	// AC_OETags.AC_FL_RunContent(
+	// 	"src", "jspacsounds",
+	// 	"width", "4",
+	// 	"height", "4",
+	// 	"align", "middle",
+	// 	"id", "jspacsounds",
+	// 	"quality", "high",
+	// 	"bgcolor", "#000000",
+	// 	"name", "jspacsounds",
+	// 	"allowScriptAccess","sameDomain",
+	// 	"type", "application/x-shockwave-flash",
+	// 	"pluginspage", "http://www.adobe.com/go/getflashplayer"
+	// );
+}
+else {
+	document.write('&nbsp;');
+}
+// -->
+</script>
+				</td>
+				<td rowspan="2" nowrap align="left">
+
+<script type="text/javascript">
+<!--
+// output the volume contol, if sound availble
+if (AudioManager.supported() || JSPacManSwfSupported) {
+	document.write('<div id="pacmanSndctrl"><img id="pacmanSndsliderbg" src="pacimages/sndsliderbg.gif" alt="" width="90" height="25"><div id="pacmanSndslider"><img src="pacimages/sndslider.gif" alt="" width="9" height="15"><\/div><\/div>');
+}
+// -->
+</script>
+				</td>
+			</tr>
+			<tr valign="middle">
+				<td nowrap class="pacmanGamedisplay2" width="46" align="left">Mazes:</td>
+				<td width="233" align="left">
+					<select id="pacmanMazeselect" onchange="JSPacMan.setMazeMode(this.options[this.selectedIndex].value); JSPacMan.newGame(); if (this.blur) this.blur();">
+						<option value="StandardLevels" selected>Standard Levels</option>
+						<option value="RandomLevels">Random Levels</option>
+					</select>
+				</td>
+				<td class="pacmanGamedisplay3" nowrap>Sound:&nbsp;&nbsp;<script type="text/javascript">
+<!--
+// no sound availble
+// if ((!hasRequestedFlashVersion) && (!AudioManager.supported())) {
+// 	document.write('n.a.');
+// }
+// -->
+</script></td>
+			</tr>
+		</table>
+	</td>
+	</tr>
+	</table>
+	
+	<table border="0" cellspacing="0" cellpadding="0">
+		<tr valign="top">
+			<td class="pacmanGamedisplay3" align="center" height="14"></td>
+			<td class="pacmanGamedisplay3" align="center">-</td>
+			<td class="pacmanGamedisplay3" align="center"></td>
+			<td class="pacmanGamedisplay3" align="center">+</td>
+			<td class="pacmanGamedisplay3"></td>
+			<td class="pacmanGamedisplay3" align="center"></td>
+			<td class="pacmanGamedisplay3" align="center">-</td>
+			<td class="pacmanGamedisplay3" align="center"></td>
+			<td class="pacmanGamedisplay3" align="center"></td>
+			<td class="pacmanGamedisplay3" align="center">+</td>
+		</tr>
+		<tr valign="top">
+			<td class="pacmanGamedisplay3" nowrap>Animation quality:&nbsp;&nbsp;</td>
+			<td align="center" width="20"><img src="pacimages/neon_lo.gif" alt="" width="14" height="14" border="0" id="pacmanNeon_q0" title="quality: low" onclick="JSPacMan.setQuality(0)" onfocus="if (this.blur) this.blur();" style="cursor: pointer"></td>
+			<td align="center" width="20"><img src="pacimages/neon_lo.gif" alt="" width="14" height="14" border="0" id="pacmanNeon_q1" title="quality: medium" onclick="JSPacMan.setQuality(1)" onfocus="if (this.blur) this.blur();" style="cursor: pointer"></td>
+			<td align="center" width="20"><img src="pacimages/neon_lo.gif" alt="" width="14" height="14" border="0" id="pacmanNeon_q2" title="quality: high" onclick="JSPacMan.setQuality(2)" onfocus="if (this.blur) this.blur();" style="cursor: pointer"></td>
+			<td class="pacmanGamedisplay3" width="22"></td>
+			<td class="pacmanGamedisplay3" nowrap>Speed:&nbsp;&nbsp;</td>
+			<td align="center" width="20"><img src="pacimages/neon_lo.gif" alt="" width="14" height="14" border="0" id="pacmanNeon_s0" title="speed: low" onclick="JSPacMan.setSpeed(0)" onfocus="if (this.blur) this.blur();" style="cursor: pointer"></td>
+			<td align="center" width="20"><img src="pacimages/neon_lo.gif" alt="" width="14" height="14" border="0" id="pacmanNeon_s1" title="speed: medium" onclick="JSPacMan.setSpeed(1)" onfocus="if (this.blur) this.blur();" style="cursor: pointer"></td>
+			<td align="center" width="20"><img src="pacimages/neon_lo.gif" alt="" width="14" height="14" border="0" id="pacmanNeon_s2" title="speed: high" onclick="JSPacMan.setSpeed(2)" onfocus="if (this.blur) this.blur();" style="cursor: pointer"></td>
+			<td align="center" width="20"><img src="pacimages/neon_lo.gif" alt="" width="14" height="14" border="0" id="pacmanNeon_s3" title="speed: really fast ..." onclick="JSPacMan.setSpeed(3)" onfocus="if (this.blur) this.blur();" style="cursor: pointer"></td>
+		</tr>
+	</table>
+</div>
+
+
+
+
+
+
+</center>
+
+</body>
+</html>
